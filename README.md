@@ -10,7 +10,7 @@ This fork is patched for running with _only_ Deno, _without_ Node.js installed. 
 
 - Ensure that your directory path looks like this:
 ```
-`[yt-dlp folder]\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\yt_dlp_plugins\extractor`
+...yt-dlp\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\yt_dlp_plugins\extractor
 ```
 
 - Create a text file in your yt-dlp folder called `yt-dlp.conf`. Edit the file and insert this:
