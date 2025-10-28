@@ -1,4 +1,4 @@
-# BgUtils POT Provider
+# BgUtils POT Provider (Deno only; no Node.js)
 
 This fork is patched for running with _only_ Deno, _without_ Node.js installed. Here is how to do it:
 
