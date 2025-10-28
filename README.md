@@ -4,9 +4,9 @@ This fork is patched for running with _only_ Deno, _without_ Node.js installed. 
 
 - Download the repository.
 
-- Create `yt_dlp_plugins` folder in same folder as yt-dlp.
+- Create a new folder in same folder as yt-dlp and name it `yt_dlp_plugins`.
 
-- Unzip `bgutil-ytdlp-pot-provider-deno-compat.zip` into a the `yt_dlp_plugins` folder.
+- Unzip `bgutil-ytdlp-pot-provider-deno-compat.zip` into the above `yt_dlp_plugins` folder.
 
 - Ensure that your directory path looks like this:
 ```
