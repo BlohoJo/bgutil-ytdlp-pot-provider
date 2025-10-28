@@ -56,14 +56,25 @@ class BgUtilScriptPTP(BgUtilPTPBase):
         return self._check_script(self._script_path)
 
     @functools.cached_property
-    def _node_path(self):
+    def _runtime(self):
+        """Return tuple (runner, argv_prefix).
+        runner: 'node' or 'deno'
+        argv_prefix: list used to invoke the script, e.g. ['node'] or ['deno','run','-A']
+        """
+        # Prefer Node if present (original behavior)
         node_path = shutil.which('node')
-        if node_path is None:
-            return None
-        vsn = self._check_node_version(node_path)
-        if vsn:
-            self.logger.trace(f'Node version: {vsn}')
-            return node_path
+        if node_path:
+            vsn = self._check_node_version(node_path)
+            if vsn:
+                self.logger.trace(f'Node version: {vsn}')
+                return ('node', [node_path])
+        # Fallback to Deno
+        deno_path = shutil.which('deno')
+        if deno_path:
+            # Optional: check Deno version here if you want
+            self.logger.trace('Using Deno runtime fallback')
+            return ('deno', [deno_path, 'run', '-A'])
+        return (None, None)
 
     def _check_script_impl(self, script_path):
         if not os.path.isfile(script_path):
@@ -74,12 +85,12 @@ class BgUtilScriptPTP(BgUtilPTPBase):
             self.logger.warning(
                 'Incorrect script passed to extractor args. Path to generate_once.js required', once=True)
             return False
-        node_path = self._node_path
-        if not node_path:
-            self.logger.error('Node.js executable not found. Please ensure Node.js is installed and available in PATH.')
+        runner, argv_prefix = self._runtime
+        if not runner:
+            self.logger.error('Neither Node.js nor Deno was found in PATH; one is required to run the script.')
             return False
         stdout, stderr, returncode = Popen.run(
-            [self._node_path, script_path, '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            [*argv_prefix, script_path, '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
             timeout=self._GET_SERVER_VSN_TIMEOUT)
         if returncode:
             self.logger.warning(
@@ -124,7 +135,8 @@ class BgUtilScriptPTP(BgUtilPTPBase):
         self.logger.trace(
             f'Generating POT via script: {self._script_path}')
 
-        command_args = [self._node_path, self._script_path]
+        runner, argv_prefix = self._runtime
+        command_args = [*argv_prefix, self._script_path]
         if proxy := request.request_proxy:
             command_args.extend(['-p', proxy])
         command_args.extend(['-c', get_webpo_content_binding(request)[0]])
