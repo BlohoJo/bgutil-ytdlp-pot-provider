@@ -1,5 +1,42 @@
 # BgUtils POT Provider
 
+This fork is patched for running with _only_ Deno, _without_ Node.js installed. Here is how to do it:
+
+- Download the repository.
+
+- Create `yt_dlp_plugins` folder in same folder as yt-dlp.
+
+- Unzip `bgutil-ytdlp-pot-provider-deno-compat` into a the `yt_dlp_plugins` folder.
+
+- Ensure that your directory path looks like this:
+```
+`[yt-dlp folder]\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\yt_dlp_plugins\extractor`
+```
+
+- Create a text file in your yt-dlp folder called `yt-dlp.conf`. Edit the file and insert this:
+```
+--plugin-dirs "yt_dlp_plugins"
+--extractor-args "youtubepot-bgutilhttp:base_url=http://[::1]:4416"
+--extractor-args "youtubepot-bgutilscript:script_path=yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server\build\generate_once.js"
+```
+
+- Install the dependencies. Open the command line in the folder `...yt-dlp\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server` and run:
+```
+deno install --node-modules-dir=auto --allow-scripts=npm:canvas
+```
+
+- Run the server. Run the following from a command line in the folder `...yt-dlp\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server`:
+```
+deno run -A src/main.ts
+```
+
+- Ensure that yt-dlp is using the plugin: run `yt-dlp -v`. In the output, you should see:
+```
+[debug] Plugin directories: yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\yt_dlp_plugins
+```
+
+-------------------------
+
 > [!CAUTION]
 > Providing a PO token does not guarantee bypassing 403 errors or bot checks, but it _may_ help your traffic seem more legitimate.
 
