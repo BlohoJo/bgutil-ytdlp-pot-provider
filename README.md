@@ -20,7 +20,7 @@ This fork is patched for running with _only_ Deno, _without_ Node.js installed. 
 --extractor-args "youtubepot-bgutilscript:script_path=yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server\build\generate_once.js"
 ```
 
-- Install the dependencies. Open the command line in the folder `...yt-dlp\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server` and run:
+- Install the dependencies. Open a command line in the folder `...yt-dlp\yt_dlp_plugins\bgutil-ytdlp-pot-provider-deno-compat\server` and run:
 ```
 deno install --node-modules-dir=auto --allow-scripts=npm:canvas
 ```
